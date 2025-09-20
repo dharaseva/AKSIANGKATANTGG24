@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kegiatan - Dharaseva 25</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(120deg, #003366 0%, #4f8cff 60%, #ffcc00 100%);
+            margin: 0;
+            min-height: 100vh;
+            opacity: 0;
+            transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1);
+        }
+        body.page-loaded {
+            opacity: 1;
+        }
+        /* Navbar styles */
+        .navbar {
+            width: 100%;
+            background: #003366;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            height: 64px;
+        }
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+        }
+        .navbar .logo img {
+            height: 38px;
+            margin-right: 12px;
+        }
+        .navbar .logo span {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .navbar nav {
+            display: flex;
+            align-items: center;
+        }
+        .navbar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+        .navbar li {
+            position: relative;
+            margin: 0 12px;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            padding: 8px 6px;
+            display: block;
+            transition: color 0.2s;
+        }
+        .navbar a:hover,
+        .navbar a:focus {
+            color: #ffcc00;
+        }
+        /* Dropdown menu */
+        .dropdown {
+            position: relative;
+        }
+        .dropdown > a::after {
+            content: " ▼";
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            color: #003366;
+            min-width: 180px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 8px 0;
+            z-index: 2000;
+            flex-wrap: nowrap;
+            flex-direction: column;
+        }
+        .dropdown-menu a {
+            color: #003366;
+            padding: 10px 20px;
+            font-weight: 500;
+            font-size: 15px;
+            white-space: nowrap;
+            text-align: left;
+        }
+        .dropdown-menu a:hover,
+        .dropdown-menu a:focus {
+            background: #e0e7ff;
+            color: #007bff;
+        }
+        .dropdown.open > .dropdown-menu {
+            display: block;
+        }
+        /* Hamburger menu - Always visible */
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+        }
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 3px;
+            background: white;
+            margin: 4px 0;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+        /* Responsive styles - Unified hamburger menu for all devices */
+        .navbar {
+            padding: 0 16px;
+        }
+        .navbar nav {
+            position: fixed;
+            top: 64px;
+            left: 0;
+            width: 100%;
+            background: #003366;
+            flex-direction: column;
+            display: none;
+            z-index: 1500;
+            max-height: calc(100vh - 64px);
+            overflow-y: auto;
+        }
+        .navbar nav.show {
+            display: flex;
+        }
+        .navbar ul {
+            flex-direction: column;
+            width: 100%;
+        }
+        .navbar li {
+            margin: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .navbar a {
+            padding: 14px 24px;
+            font-size: 18px;
+        }
+        .dropdown-menu {
+            position: static;
+            box-shadow: none;
+            background: #004080;
+            border-radius: 0;
+            padding-left: 20px;
+            display: none !important;
+        }
+        .dropdown-menu a {
+            color: white;
+            padding: 10px 0;
+            font-weight: normal;
+        }
+        .dropdown.open > .dropdown-menu {
+            display: flex !important;
+            flex-direction: column;
+        }
+        @media (max-width: 480px) {
+            .navbar a {
+                font-size: 16px;
+                padding: 12px 20px;
+            }
+        }
+        /* Hero and footer styles remain unchanged */
+        .hero {
+            margin-top: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+            padding: 32px 0 0 0;
+        }
+        .hero-img {
+            width: 180px;
+            height: 180px;
+            background: #e0e7ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+        .hero-img img {
+            width: 187px;
+            height: 187px;
+            object-fit: contain;
+        }
+        .hero-text {
+            max-width: 420px;
+        }
+        .hero-text h2 {
+            color: #003366;
+            margin-bottom: 10px;
+        }
+        .hero-text p {
+            color: #333;
+            font-size: 17px;
+            text-align: justify;
+        }
+        footer {
+            margin-top: 48px;
+            background: #003366;
+            color: #fff;
+            text-align: center;
+            padding: 18px 0 12px 0;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="logo">
+            <img src="Logo_aksang.png" alt="Logo Dharaseva 25" />
+            <span>Dharaseva 25</span>
+        </div>
+        <div class="hamburger" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" role="button" tabindex="0">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <nav id="mainMenu">
+            <ul>
+                <li class="dropdown" tabindex="0">
+                    <a href="#" aria-haspopup="true" aria-expanded="false">Menu Utama</a>
+                    <ul class="dropdown-menu" aria-label="submenu">
+                        <li><a href="tpb.html">Visi & Misi</a></li>
+                        <li><a href="akademik.html">Geodesi</a></li>
+                        <li><a href="dokumentasi.html">Dokumentasi Acara</a></li>
+                        <li><a href="event.html">Kegiatan</a></li>
+                        <li><a href="landingpage.html">Peta</a></li>
+                    </ul>
+                </li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="timeline.html">Timeline</a></li>
+                <li><a href="organogram.html">Organogram</a></li>
+                <li><a href="luaran.html">Luaran</a></li>
+                <li><a href="kontak.html">Kontak</a></li>
+            </ul>
+        </nav>
+    </nav>
+    <div class="hero">
+        <div class="hero-img">
+            <img src="Logo_ITB.png" alt="Logo ITB" />
+        </div>
+        <div class="hero-text">
+            <h2>Kegiatan</h2>
+            <p>Temukan berbagai informasi seputar kegiatan mahasiswa, tujuan, dan event yang diadakan di Dheraseva 25. Jelajahi menu utama di pojok kanan atas untuk akses cepat ke berbagai layanan dan dokumentasi penting.</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" style="max-width: 1200px; margin: 0 auto; padding: 40px 20px;">
+        <!-- Pendahuluan Section -->
+        <div class="content-section" style="background: white; border-radius: 12px; padding: 32px; margin-bottom: 32px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+            <h3 style="color: #003366; font-size: 28px; margin-bottom: 20px; font-weight: bold; border-bottom: 3px solid #4f8cff; padding-bottom: 10px;">📖 Pendahuluan</h3>
+            <p style="color: #555; font-size: 16px; line-height: 1.8; text-align: justify; margin-bottom: 16px;">
+                Seiring dengan pesatnya perkembangan teknologi ilmu geodesi dan geomatika, muncul pula tantangan-tantangan kompleks di masyarakat yang menuntut aplikasi ilmu ini secara langsung. Berbagai isu seperti sengketa lahan akibat ketidakpastian batas, kerentanan wilayah terhadap bencana alam (banjir, longsor, gempa bumi), perencanaan tata ruang yang belum optimal, serta kebutuhan mendesak akan data geospasial yang akurat untuk pembangunan berkelanjutan adalah realitas yang ada di sekitar kita.
+            </p>
+            <p style="color: #555; font-size: 16px; line-height: 1.8; text-align: justify;">
+                Tantangan ini adalah ruang kosong yang harus diisi oleh para ahli Geodesi dan Geomatika masa depan.
+            </p>
+        </div>
+
+        <!-- Tema Kegiatan Section -->
+        <div class="content-section" style="background: white; border-radius: 12px; padding: 32px; margin-bottom: 32px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+            <h3 style="color: #003366; font-size: 28px; margin-bottom: 20px; font-weight: bold; border-bottom: 3px solid #4f8cff; padding-bottom: 10px;">🎭 Tema Kegiatan</h3>
+            <p style="color: #555; font-size: 16px; line-height: 1.8; text-align: justify; margin-bottom: 16px;">
+                Aksi Angkatan ini bertemakan <strong>"A Journey into a Pirates World"</strong> dengan nama acara yaitu <strong>Dharaseva</strong>. Sebuah kata yang berasal dari gabungan dua unsur makna. <em>Dhara</em> berarti bumi, yaitu tempat tinggal dan sumber kehidupan. Sementara itu, <em>Seva</em> berarti pengabdian, yang merujuk pada sikap konstribusi secara sukarela untuk kebaikan bersama.
+            </p>
+            <p style="color: #555; font-size: 16px; line-height: 1.8; text-align: justify;">
+                Melalui tema ini, Aksi Angkatan diarahkan sebagai bentuk kolaborasi antaranggota angkatan dalam menumbuhkan rasa kepedulian sosial dan lingkungan, serta membangun kesadaran akan pentingnya peran individu dalam menjaga keberlanjutan.
+            </p>
+        </div>
+
+        <!-- Tujuan Kegiatan Section -->
+        <div class="content-section" style="background: white; border-radius: 12px; padding: 32px; margin-bottom: 32px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+            <h3 style="color: #003366; font-size: 28px; margin-bottom: 20px; font-weight: bold; border-bottom: 3px solid #4f8cff; padding-bottom: 10px;">🎯 Tujuan Kegiatan</h3>
+            <div class="objectives-list" style="padding-left: 20px;">
+                <div style="margin-bottom: 16px; display: flex; align-items: flex-start;">
+                    <span style="color: #4f8cff; font-size: 24px; margin-right: 12px; font-weight: bold;">1.</span>
+                    <p style="color: #555; font-size: 16px; line-height: 1.8; margin: 0; text-align: justify;">
+                        Mewadahi ruang untuk berkolaborasi bersama dalam satu Angkatan untuk hadir memberikan dampak yang progresif bagi masyarakat.
+                    </p>
+                </div>
+                <div style="margin-bottom: 16px; display: flex; align-items: flex-start;">
+                    <span style="color: #4f8cff; font-size: 24px; margin-right: 12px; font-weight: bold;">2.</span>
+                    <p style="color: #555; font-size: 16px; line-height: 1.8; margin: 0; text-align: justify;">
+                        Menyatukan suara dari setiap massa GD'24 untuk memberikan pendapatnya sehingga dapat memberikan kontribusi nyata dalam bentuk edukasi dan juga produk.
+                    </p>
+                </div>
+                <div style="margin-bottom: 16px; display: flex; align-items: flex-start;">
+                    <span style="color: #4f8cff; font-size: 24px; margin-right: 12px; font-weight: bold;">3.</span>
+                    <p style="color: #555; font-size: 16px; line-height: 1.8; margin: 0; text-align: justify;">
+                        Mendorong pemikiran atau ide-ide baru untuk memecahkan permasalahan yang ada di keilmuan Teknik Geodesi dan Geomatika.
+                    </p>
+                </div>
+                <div style="margin-bottom: 16px; display: flex; align-items: flex-start;">
+                    <span style="color: #4f8cff; font-size: 24px; margin-right: 12px; font-weight: bold;">4.</span>
+                    <p style="color: #555; font-size: 16px; line-height: 1.8; margin: 0; text-align: justify;">
+                        Merancang aksi angkatan yang relevan, tepat sasaran, dan dapat bermanfaat bagi masyarakat sekitar.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manfaat Kegiatan Section -->
+        <div class="content-section" style="background: white; border-radius: 12px; padding: 32px; margin-bottom: 32px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+            <h3 style="color: #003366; font-size: 28px; margin-bottom: 20px; font-weight: bold; border-bottom: 3px solid #4f8cff; padding-bottom: 10px;">💡 Manfaat Kegiatan</h3>
+            <div class="benefits-list" style="padding-left: 20px;">
+                <div style="margin-bottom: 16px; display: flex; align-items: flex-start;">
+                    <span style="color: #4f8cff; font-size: 24px; margin-right: 12px; font-weight: bold;">1.</span>
+                    <p style="color: #555; font-size: 16px; line-height: 1.8; margin: 0; text-align: justify;">
+                        Memperkuat identitas keilmuan Geodesi dan Geomatika dengan menunjukkan peran nyata mahasiswa dalam memecahkan persoalan di Masyarakat.
+                    </p>
+                </div>
+                <div style="margin-bottom: 16px; display: flex; align-items: flex-start;">
+                    <span style="color: #4f8cff; font-size: 24px; margin-right: 12px; font-weight: bold;">2.</span>
+                    <p style="color: #555; font-size: 16px; line-height: 1.8; margin: 0; text-align: justify;">
+                        Menguatkan kapasitas dan solidaritas massa Teknik Geodesi dan Geomatika melalui kolaborasi dalam merancang serta melaksanakan aksi angkatan secara sistematis.
+                    </p>
+                </div>
+                <div style="margin-bottom: 16px; display: flex; align-items: flex-start;">
+                    <span style="color: #4f8cff; font-size: 24px; margin-right: 12px; font-weight: bold;">3.</span>
+                    <p style="color: #555; font-size: 16px; line-height: 1.8; margin: 0; text-align: justify;">
+                        Memberikan kontribusi nyata kepada Masyarakat melalui edukasi dan produk geospasial yang relevan dengan kebutuhan lingkungan sekitar.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rangkaian Kegiatan Section -->
+        <div class="content-section" style="background: white; border-radius: 12px; padding: 32px; margin-bottom: 32px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+            <h3 style="color: #003366; font-size: 28px; margin-bottom: 20px; font-weight: bold; border-bottom: 3px solid #4f8cff; padding-bottom: 10px;">📅 Rangkaian Kegiatan</h3>
+
+            <!-- Pencerdasan -->
+            <div class="activity-item" style="margin-bottom: 32px; padding: 24px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #4f8cff;">
+                <h4 style="color: #003366; font-size: 22px; margin-bottom: 16px; display: flex; align-items: center;">
+                    <span style="background: #4f8cff; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: bold;">1</span>
+                    Pencerdasan
+                </h4>
+                <p style="color: #555; font-size: 16px; line-height: 1.8; text-align: justify; margin-bottom: 16px;">
+                    Kegiatan pencerdasan dilakukan kepada seluruh massa Teknik geodesi dan geomatika Angkatan 2024 lewat platform zoom. Pencerdasan dilakukan kepada massa GD'24. Sebelum melakukan edukasi kepada siswa SMA dan masyarakat Desa. Pencerdasan ini dilakukan untuk membekasi massa GD'24 dengan pemahaman Komprehensif mengenai keilmuan geodesi sehingga mereka siap menyempaikan.
+                </p>
+            </div>
+
+            <!-- Edukasi -->
+            <div class="activity-item" style="margin-bottom: 32px; padding: 24px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #4f8cff;">
+                <h4 style="color: #003366; font-size: 22px; margin-bottom: 16px; display: flex; align-items: center;">
+                    <span style="background: #4f8cff; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: bold;">2</span>
+                    Edukasi
+                </h4>
+                <p style="color: #555; font-size: 16px; line-height: 1.8; text-align: justify; margin-bottom: 20px;">
+                    Edukasi diberikan kepada siswa-siswi SMAN 20 Bandung dan SMAN 12 Bandung. Edukasi juga diberikan kepada Masyarakat desa sumbersari lewat poster informatif. Edukasi dilaksanakan sebagai bentuk penerapan langsung dari hasil pencerdasan yang telah diterima oleh massa GD'24. Kegiatan ini menyasar siswa SMA dengan tujuan meningkatkan pemahaman mereka terhadap keilmuan yang berkaitan dengan Teknik Geodesi dan Geomatika. Penyampaian dilakukan secara interaktif melalui presentasi, sesi tanya jawab, dan games sederhana agar materi lebih mudah dipahami serta relevan dengan kebutuhan sehari-hari.
+                </p>
+
+                <div class="education-locations" style="padding-left: 20px;">
+                    <h5 style="color: #003366; font-size: 18px; margin-bottom: 12px;">Lokasi Edukasi:</h5>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+                        <div style="background: white; padding: 16px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <h6 style="color: #4f8cff; font-size: 16px; margin-bottom: 8px;">🏫 Kegiatan Edukasi di SMAN 20 Bandung</h6>
+                        </div>
+                        <div style="background: white; padding: 16px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <h6 style="color: #4f8cff; font-size: 16px; margin-bottom: 8px;">🏫 Kegiatan Edukasi di SMAN 12 Bandung</h6>
+                        </div>
+                        <div style="background: white; padding: 16px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <h6 style="color: #4f8cff; font-size: 16px; margin-bottom: 8px;">🏘️ Kegiatan Edukasi di Desa Sumbersari</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pengabdian -->
+            <div class="activity-item" style="margin-bottom: 32px; padding: 24px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #4f8cff;">
+                <h4 style="color: #003366; font-size: 22px; margin-bottom: 16px; display: flex; align-items: center;">
+                    <span style="background: #4f8cff; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: bold;">3</span>
+                    Pengabdian
+                </h4>
+                <p style="color: #555; font-size: 16px; line-height: 1.8; text-align: justify;">
+                    Pengabdian dilakukan kepada masyarakat desa, dimana mahasiswa Teknik Geodesi dan Geomatika angkatan 2024 hadir secara langsung di tengah masyarakat untuk memberikan konstribusi nyata. Kegiatan ini diwujudkan melalui implementasi ilmu geodesi dan geomatika dalam bentuk penyuluhan, pendampingan, serta penerapan produk geospasial sederhana yaitu pembuatan biopori yang relevan dengan kebutuhan desa.
+                </p>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="cta-section" style="background: linear-gradient(135deg, #003366 0%, #4f8cff 100%); border-radius: 12px; padding: 32px; text-align: center; color: white;">
+            <h3 style="font-size: 24px; margin-bottom: 16px;">🚀 Mari Bergabung dalam Aksi Angkatan Dharaseva 25!</h3>
+            <p style="font-size: 16px; margin-bottom: 24px; opacity: 0.9;">
+                Bersama kita wujudkan perubahan nyata melalui ilmu Geodesi dan Geomatika untuk masyarakat dan lingkungan.
+            </p>
+            <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+                <a href="kontak.html" style="background: #ffcc00; color: #003366; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; transition: transform 0.2s;">📞 Hubungi Kami</a>
+                <a href="dokumentasi.html" style="background: rgba(255,255,255,0.2); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; border: 2px solid rgba(255,255,255,0.3); transition: transform 0.2s;">📸 Lihat Dokumentasi</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 Dheraseva 25. Portal Aksi Angkatan. All rights reserved.
+    </footer>
+    <script>
+        // Toggle mobile menu
+        const menuToggle = document.getElementById('menuToggle');
+        const mainMenu = document.getElementById('mainMenu');
+        const dropdown = document.querySelector('.dropdown');
+        // Initially close dropdown submenu
+        dropdown.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        mainMenu.classList.remove('show');
+
+        // Ensure dropdown menu is hidden on page load to prevent showing centered text menu
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+        if (dropdownMenu) {
+            dropdownMenu.style.display = 'none';
+        }
+        menuToggle.addEventListener('click', () => {
+            const expanded = menuToggle.getAttribute('aria-expanded') === 'true' || false;
+            menuToggle.setAttribute('aria-expanded', !expanded);
+            mainMenu.classList.toggle('show');
+            // Close dropdown submenu when main menu toggled closed
+            if (expanded) {
+                dropdown.classList.remove('open');
+            }
+        });
+        // Toggle dropdown submenu on mobile and desktop
+        dropdown.addEventListener('click', (e) => {
+            if(window.innerWidth <= 900) {
+                // Allow link navigation only if clicking on submenu links, not the parent menu
+                if(e.target.tagName.toLowerCase() === 'a' && e.target.parentElement.classList.contains('dropdown')) {
+                    // Prevent toggle if clicking parent menu link
+                    e.preventDefault();
+                    dropdown.classList.toggle('open');
+                } else if(e.target.tagName.toLowerCase() === 'a' && e.target.parentElement.parentElement.classList.contains('dropdown-menu')) {
+                    // Allow navigation for submenu links
+                    // Do nothing special, let link work normally
+                } else {
+                    e.preventDefault();
+                    dropdown.classList.toggle('open');
+                }
+            } else {
+                // For desktop, toggle dropdown on click of parent menu
+                if(e.target.tagName.toLowerCase() === 'a' && e.target.parentElement.classList.contains('dropdown')) {
+                    e.preventDefault();
+                    if (dropdown.classList.contains('open')) {
+                        dropdown.classList.remove('open');
+                    } else {
+                        // Close any other open dropdowns first
+                        const openDropdowns = document.querySelectorAll('.dropdown.open');
+                        openDropdowns.forEach(d => {
+                            if (d !== dropdown) {
+                                d.classList.remove('open');
+                            }
+                        });
+                        dropdown.classList.add('open');
+                    }
+                }
+            }
+        });
+        // Remove any duplicate dropdown menus that might cause centered text
+        const duplicateDropdowns = document.querySelectorAll('.dropdown-menu.duplicate');
+        duplicateDropdowns.forEach(dd => dd.remove());
+        // Accessibility: allow keyboard toggle for dropdown
+        dropdown.addEventListener('keydown', (e) => {
+            if(e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                dropdown.classList.toggle('open');
+            }
+        });
+        // Fade-in effect on page load
+        window.addEventListener('load', function() {
+            document.body.classList.add('page-loaded');
+        });
+    </script>
+</body>
+</html>

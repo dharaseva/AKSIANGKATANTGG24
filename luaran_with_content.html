@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Luaran - Dharaseva 25</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(120deg, #003366 0%, #4f8cff 60%, #ffcc00 100%);
+            margin: 0;
+            min-height: 100vh;
+            opacity: 0;
+            transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1);
+        }
+        body.page-loaded {
+            opacity: 1;
+        }
+        /* Navbar styles */
+        .navbar {
+            width: 100%;
+            background: #003366;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            height: 64px;
+        }
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+        }
+        .navbar .logo img {
+            height: 38px;
+            margin-right: 12px;
+        }
+        .navbar .logo span {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .navbar nav {
+            display: flex;
+            align-items: center;
+        }
+        .navbar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+        .navbar li {
+            position: relative;
+            margin: 0 12px;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            padding: 8px 6px;
+            display: block;
+            transition: color 0.2s;
+        }
+        .navbar a:hover,
+        .navbar a:focus {
+            color: #ffcc00;
+        }
+        /* Dropdown menu */
+        .dropdown {
+            position: relative;
+        }
+        .dropdown > a::after {
+            content: " ▼";
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            color: #003366;
+            min-width: 180px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 8px 0;
+            z-index: 2000;
+            flex-wrap: nowrap;
+            flex-direction: column;
+        }
+        .dropdown-menu a {
+            color: #003366;
+            padding: 10px 20px;
+            font-weight: 500;
+            font-size: 15px;
+            white-space: nowrap;
+            text-align: left;
+        }
+        .dropdown-menu a:hover,
+        .dropdown-menu a:focus {
+            background: #e0e7ff;
+            color: #007bff;
+        }
+        .dropdown.open > .dropdown-menu {
+            display: block;
+        }
+        /* Hamburger menu - Always visible */
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+        }
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 3px;
+            background: white;
+            margin: 4px 0;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+        /* Responsive styles - Unified hamburger menu for all devices */
+        .navbar {
+            padding: 0 16px;
+        }
+        .navbar nav {
+            position: fixed;
+            top: 64px;
+            left: 0;
+            width: 100%;
+            background: #003366;
+            flex-direction: column;
+            display: none;
+            z-index: 1500;
+            max-height: calc(100vh - 64px);
+            overflow-y: auto;
+        }
+        .navbar nav.show {
+            display: flex;
+        }
+        .navbar ul {
+            flex-direction: column;
+            width: 100%;
+        }
+        .navbar li {
+            margin: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .navbar a {
+            padding: 14px 24px;
+            font-size: 18px;
+        }
+        .dropdown-menu {
+            position: static;
+            box-shadow: none;
+            background: #004080;
+            border-radius: 0;
+            padding-left: 20px;
+            display: none !important;
+        }
+        .dropdown-menu a {
+            color: white;
+            padding: 10px 0;
+            font-weight: normal;
+        }
+        .dropdown.open > .dropdown-menu {
+            display: flex !important;
+            flex-direction: column;
+        }
+        @media (max-width: 480px) {
+            .navbar a {
+                font-size: 16px;
+                padding: 12px 20px;
+            }
+        }
+        /* Hero and footer styles remain unchanged */
+        .hero {
+            margin-top: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+            padding: 32px 0 0 0;
+        }
+        .hero-img {
+            width: 180px;
+            height: 180px;
+            background: #e0e7ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+        .hero-img img {
+            width: 187px;
+            height: 187px;
+            object-fit: contain;
+        }
+        .hero-text {
+            max-width: 420px;
+        }
+        .hero-text h2 {
+            color: #003366;
+            margin-bottom: 10px;
+        }
+        .hero-text p {
+            color: #333;
+            font-size: 17px;
+            text-align: justify;
+        }
+        footer {
+            margin-top: 48px;
+            background: #003366;
+            color: #fff;
+            text-align: center;
+            padding: 18px 0 12px 0;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .content-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        .luaran-section h2 {
+            color: #003366;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .content-block {
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .text-content {
+            flex: 1;
+        }
+
+        .text-content p {
+            line-height: 1.8;
+            margin-bottom: 20px;
+            text-align: justify;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .image-content {
+            flex: 1;
+            text-align: center;
+        }
+
+        .content-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .content-container {
+                padding: 20px;
+            }
+
+            .luaran-section h2 {
+                font-size: 24px;
+            }
+
+            .text-content p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="logo">
+            <img src="Logo_aksang.png" alt="Logo Dharaseva 25" />
+            <span>Dharaseva 25</span>
+        </div>
+        <div class="hamburger" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" role="button" tabindex="0">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <nav id="mainMenu">
+            <ul>
+                <li class="dropdown" tabindex="0">
+                    <a href="#" aria-haspopup="true" aria-expanded="false">Menu Utama</a>
+                    <ul class="dropdown-menu" aria-label="submenu">
+                        <li><a href="tpb.html">Visi & Misi</a></li>
+                        <li><a href="akademik.html">Geodesi</a></li>
+                        <li><a href="dokumentasi.html">Dokumentasi Acara</a></li>
+                        <li><a href="event.html">Kegiatan</a></li>
+                        <li><a href="landingpage.html">Peta</a></li>
+                    </ul>
+                </li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="timeline.html">Timeline</a></li>
+                <li><a href="organogram.html">Organogram</a></li>
+                <li><a href="luaran.html">Luaran</a></li>
+                <li><a href="kontak.html">Kontak</a></li>
+            </ul>
+        </nav>
+    </nav>
+
+    <div class="hero">
+        <div class="hero-img">
+            <img src="Logo_ITB.png" alt="Logo ITB" />
+        </div>
+        <div class="hero-text">
+            <h2>Luaran</h2>
+            <p>Temukan berbagai informasi seputar luaran, kegiatan mahasiswa, tujuan, dan event yang diadakan di Dheraseva 25. Jelajahi menu utama di pojok kanan atas untuk akses cepat ke berbagai layanan dan dokumentasi penting.</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="content-container">
+            <section class="luaran-section">
+                <h2>Evaluasi Kegiatan Penyuluhan Geodesi di SMAN 12 dan SMAN 20 Bandung</h2>
+
+                <div class="content-block">
+                    <div class="text-content">
+                        <p>Penilaian dilakukan melalui kahoot dengan 4 soal materi dan 1 soal bonus, dan dikerjakan oleh 444 murid SMA, 107 dari SMAN 12 dan 337 dari SMAN 20 Bandung pada Jumat, 12 September 2025. Ketiga peserta dengan nilai tertinggi setiap sesi/kelasnya diberikan hadiah oleh panitia. Secara keseluruhan, diperoleh nilai rata-rata sebesar 80.3%. Apabila dilihat dari masing-masing soal, rata-rata sekitar 70% dapat menjawab mata soal pertama dan kedua, sementara untuk mata soal ketiga dan keempat lebih mendekati 90%. Dari sini, terdapat dua kemungkinan, yakni soal 1 dan 2 lebih susah, atau keduanya kurang ditangkap oleh sebagian peserta tes.</p>
+                    </div>
+                    <div class="image-content">
+                        <img src="luaransekolah1.jpg" alt="Grafik Hasil Penilaian Kahoot" class="content-image">
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <div class="text-content">
+                        <p>Setelah dilakukan penjabaran statistik, beberapa hal dapat disimpulkan; pertama, penyebaran data bersifat tidak normal, karena walaupun simpangan bakunya berukuran kecil, nilai skew dan kurtosis cukup signifikan, terutama untuk mata soal 1 dan mata soal 2. Dari nilai skew yang negatif, diketahui bahwa pada semua pertanyaan, nilai condong ke arah besar atau positif. Sementara dari kurtosis, mata soal 1 bersifat sangat lancip, sementara untuk ketiga soal lainnya lebih landai. Perbedaan tersebut dapat terjadi karena mata soal 1 memiliki jawaban yang mudah diidentifikasi. Untuk pencilan, hanya terdapat 1 kasus, yakni pada awal sesi 11, di mata soal 1. Di mana setelah saya tanya penanggungjawabnya, memang terdapat masalah teknis sehingga sebagian peserta terkendala memilih jawaban yang benar.</p>
+
+                        <p>Dikarenakan soal tersebut dilakukan hanya pada akhir pemaparan, maka yang terukur hanyalah pemahaman peserta pada akhir mata acara. Idealnya, terdapat 2 kali pengujian yang berupa pre-test dan post-test, namun akibat alokasi waktu yang pendek, diputuskan untuk hanya melakukan 1 tes di akhir. Berdasarkan tes tersebut, dapat dikatakan peserta memahami secara dasar mengenai apa itu Geodesi, ilmu Geodesi, lalu alat-alat seperti peta dan kompas. Namun, terdapat kekurangan selain tes pembanding yakni jumlah serta substansi soal, yang menurut kami 4 soal dengan pertanyaan dan jawaban yang ada kurang pas untuk menilai kepahaman peserta dengan akurat. Lalu keberadaan soal bonus (mata soal 5) yang tidak berkontribusi kepada nilai juga dihitung kurang efisien.</p>
+
+                        <p>Berikut adalah grafik batang yang menunjukkan nilai setiap sesi, diurutkan dari sesi dengan rerata nilai tertinggi hingga yang terendah; Di sini, SMAN 12 dengan sesi 10, 9, dan 11 berada pada urutan pertama, keenam, dan kesepuluh, sehingga disimpulkan terdapat variasi pada tingkat kepemahaman antara kedua sekolah, dan bahkan variasi dalam satu sekolah juga.</p>
+                    </div>
+                    <div class="image-content">
+                        <img src="luaransekolah2.jpg" alt="Grafik Batang Nilai Setiap Sesi" class="content-image">
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <div class="text-content">
+                        <p>Lalu grafik radar untuk nilai setiap sesi, serta tabel keterangan sesi, lokasi dan penanggungjawabnya; terlihat jelas anomali pada mata soal 1 di sesi 11, serta perbedaan antara kedua soal pertama dan kedua soal akhir:</p>
+                    </div>
+                    <div class="image-content">
+                        <img src="luaransekolah3.jpg" alt="Grafik Radar dan Tabel Keterangan Sesi" class="content-image">
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 Dheraseva 25. Portal Aksi Angkatan. All rights reserved.
+    </footer>
+
+    <script>
+        // Toggle mobile menu
+        const menuToggle = document.getElementById('menuToggle');
+        const mainMenu = document.getElementById('mainMenu');
+        const dropdown = document.querySelector('.dropdown');
+        // Initially close dropdown submenu
+        dropdown.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        mainMenu.classList.remove('show');
+
+        // Ensure dropdown menu is hidden on page load to prevent showing centered text menu
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+        if (dropdownMenu) {
+            dropdownMenu.style.display = 'none';
+        }
+        menuToggle.addEventListener('click', () => {
+            const expanded = menuToggle.getAttribute('aria-expanded') === 'true' || false;
+            menuToggle.setAttribute('aria-expanded', !expanded);
+            mainMenu.classList.toggle('show');
+            // Close dropdown submenu when main menu toggled closed
+            if (expanded) {
+                dropdown.classList.remove('open');
+            }
+        });
+        // Toggle dropdown submenu on mobile and desktop
+        dropdown.addEventListener('click', (e) => {
+            if(window.innerWidth <= 900) {
+                // Allow link navigation only if clicking on submenu links, not the parent menu
+                if(e.target.tagName.toLowerCase() === 'a' && e.target.parentElement.classList.contains('dropdown')) {
+                    // Prevent toggle if clicking parent menu link
+                    e.preventDefault();
+                    dropdown.classList.toggle('open');
+                } else if(e.target.tagName.toLowerCase() === 'a' && e.target.parentElement.parentElement.classList.contains('dropdown-menu')) {
+                    // Allow navigation for submenu links
+                    // Do nothing special, let link work normally
+                } else {
+                    e.preventDefault();
+                    dropdown.classList.toggle('open');
+                }
+            } else {
+                // For desktop, toggle dropdown on click of parent menu
+                if(e.target.tagName.toLowerCase() === 'a' && e.target.parentElement.classList.contains('dropdown')) {
+                    e.preventDefault();
+                    if (dropdown.classList.contains('open')) {
+                        dropdown.classList.remove('open');
+                    } else {
+                        // Close any other open dropdowns first
+                        const openDropdowns = document.querySelectorAll('.dropdown.open');
+                        openDropdowns.forEach(d => {
+                            if (d !== dropdown) {
+                                d.classList.remove('open');
+                            }
+                        });
+                        dropdown.classList.add('open');
+                    }
+                }
+            }
+        });
+        // Remove any duplicate dropdown menus that might cause centered text
+        const duplicateDropdowns = document.querySelectorAll('.dropdown-menu.duplicate');
+        duplicateDropdowns.forEach(dd => dd.remove());
+        // Accessibility: allow keyboard toggle for dropdown
+        dropdown.addEventListener('keydown', (e) => {
+            if(e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                dropdown.classList.toggle('open');
+            }
+        });
+        // Fade-in effect on page load
+        window.addEventListener('load', function() {
+            document.body.classList.add('page-loaded');
+        });
+    </script>
+</body>
+</html>

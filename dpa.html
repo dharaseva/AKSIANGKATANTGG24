@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Latar Belakang Acara - SEISMA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(120deg, #003366 0%, #4f8cff 60%, #ffcc00 100%);
+            margin: 0;
+            min-height: 100vh;
+            opacity: 0;
+            transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1);
+        }
+        body.page-loaded {
+            opacity: 1;
+        }
+        /* Navbar styles */
+        .navbar {
+            width: 100%;
+            background: #003366;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            height: 64px;
+        }
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+        }
+        .navbar .logo img {
+            height: 38px;
+            margin-right: 12px;
+        }
+        .navbar .logo span {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .navbar nav {
+            display: flex;
+            align-items: center;
+        }
+        .navbar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+        .navbar li {
+            position: relative;
+            margin: 0 12px;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            padding: 8px 6px;
+            display: block;
+            transition: color 0.2s;
+        }
+        .navbar a:hover,
+        .navbar a:focus {
+            color: #ffcc00;
+        }
+        /* Dropdown menu */
+        .dropdown {
+            position: relative;
+        }
+        .dropdown > a::after {
+            content: " ▼";
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            color: #003366;
+            min-width: 180px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 8px 0;
+            z-index: 2000;
+            flex-wrap: nowrap;
+            flex-direction: column;
+        }
+        .dropdown-menu a {
+            color: #003366;
+            padding: 10px 20px;
+            font-weight: 500;
+            font-size: 15px;
+            white-space: nowrap;
+            text-align: left;
+        }
+        .dropdown-menu a:hover,
+        .dropdown-menu a:focus {
+            background: #e0e7ff;
+            color: #007bff;
+        }
+        .dropdown.open > .dropdown-menu {
+            display: block;
+        }
+        /* Hamburger menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+        }
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 3px;
+            background: white;
+            margin: 4px 0;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+        /* Responsive styles */
+        @media (max-width: 900px) {
+            .navbar {
+                padding: 0 16px;
+            }
+            .navbar nav {
+                position: fixed;
+                top: 64px;
+                left: 0;
+                width: 100%;
+                background: #003366;
+                flex-direction: column;
+                display: none;
+                z-index: 1500;
+                max-height: calc(100vh - 64px);
+                overflow-y: auto;
+            }
+            .navbar nav.show {
+                display: flex;
+            }
+            .navbar ul {
+                flex-direction: column;
+                width: 100%;
+            }
+            .navbar li {
+                margin: 0;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+            .navbar a {
+                padding: 14px 24px;
+                font-size: 18px;
+            }
+            .dropdown-menu {
+                position: static;
+                box-shadow: none;
+                background: #004080;
+                border-radius: 0;
+                padding-left: 20px;
+                display: none !important;
+            }
+            .dropdown-menu a {
+                color: white;
+                padding: 10px 0;
+                font-weight: normal;
+            }
+            .dropdown.open > .dropdown-menu {
+                display: flex !important;
+                flex-direction: column;
+            }
+            .hamburger {
+                display: flex;
+            }
+        }
+        /* Hide main menu items except dropdown on desktop */
+        @media (min-width: 901px) {
+            #mainMenu > ul > li:not(.dropdown) {
+                display: list-item;
+            }
+        }
+        @media (max-width: 480px) {
+            .navbar a {
+                font-size: 16px;
+                padding: 12px 20px;
+            }
+        }
+        /* Hero and footer styles remain unchanged */
+        .hero {
+            margin-top: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+            padding: 32px 0 0 0;
+        }
+        .hero-img {
+            width: 180px;
+            height: 180px;
+            background: #e0e7ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+        .hero-img img {
+            width: 187px;
+            height: 187px;
+            object-fit: contain;
+        }
+        .hero-text {
+            max-width: 420px;
+        }
+        .hero-text h2 {
+            color: #003366;
+            margin-bottom: 10px;
+        }
+        .hero-text p {
+            color: #333;
+            font-size: 17px;
+            text-align: justify;
+        }
+        footer {
+            margin-top: 48px;
+            background: #003366;
+            color: #fff;
+            text-align: center;
+            padding: 18px 0 12px 0;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="logo">
+            <img src="Logo_aksang.png" alt="Logo Dharaseva 25" />
+            <span>Dharaseva 25</span>
+        </div>
+        <div class="hamburger" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" role="button" tabindex="0">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <nav id="mainMenu">
+            <ul>
+                <li class="dropdown" tabindex="0">
+                    <a href="#" aria-haspopup="true" aria-expanded="false">Menu Utama</a>
+                    <ul class="dropdown-menu" aria-label="submenu">
+                        <li><a href="tpb.html">Visi & Misi</a></li>
+                        <li><a href="akademik.html">Geodesy</a></li>
+                        <li><a href="dokumentasi.html">Dokumentasi Acara</a></li>
+                        <li><a href="dpa.html">Latar Belakang Acara</a></li>
+                        <li><a href="event.html">Kegiatan</a></li>
+                        <li><a href="landingpage.html">Peta</a></li>
+                    </ul>
+                </li>
+                <li><a href="timeline.html">Timeline</a></li>
+                <li><a href="organogram.html">Organogram</a></li>
+                <li><a href="galeridokumentasi.html">Galeri Dokumentasi</a></li>
+                <li><a href="luaran.html">Luaran</a></li>
+            </ul>
+        </nav>
+    </nav>
+    <div class="hero">
+        <div class="hero-img">
+            <img src="Logo_ITB.png" alt="Logo ITB" />
+        </div>
+        <div class="hero-text">
+            <h2>Latar Belakang Acara</h2>
+            <p>Temukan berbagai informasi mengenai latar belakang acara Dheraseva 25, termasuk rangkaian kegiatan, tujuan, dan event yang diadakan. Jelajahi menu utama di pojok kiri atas untuk akses cepat ke berbagai layanan dan dokumentasi penting.</p>
+        </div>
+    </div>
+    <footer>
+        &copy; 2025 Dheraseva 25. Portal Aksi Angkatan. All rights reserved.
+    </footer>
+    <script>
+        // Toggle mobile menu
+        const menuToggle = document.getElementById('menuToggle');
+        const mainMenu = document.getElementById('mainMenu');
+        const dropdown = document.querySelector('.dropdown');
+        // Initially close dropdown submenu
+        dropdown.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        mainMenu.classList.remove('show');
+
+        // Ensure dropdown menu is hidden on page load to prevent showing centered text menu
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+        if (dropdownMenu) {
+            dropdownMenu.style.display = 'none';
+        }
+        menuToggle.addEventListener('click', () => {
+            const expanded = menuToggle.getAttribute('aria-expanded') === 'true' || false;
+            menuToggle.setAttribute('aria-expanded', !expanded);
+            mainMenu.classList.toggle('show');
+            // Close dropdown submenu when main menu toggled closed
+            if (expanded) {
+                dropdown.classList.remove('open');
+            }
+        });
+        // Toggle dropdown submenu on mobile and desktop
+        dropdown.addEventListener('click', (e) => {
+            if(window.innerWidth <= 900) {
+                // Allow link navigation only if clicking on submenu links, not the parent menu
+                if(e.target.tagName.toLowerCase() === 'a' && e.target.parentElement.classList.contains('dropdown')) {
+                    // Prevent toggle if clicking parent menu link
+                    e.preventDefault();
+                    dropdown.classList.toggle('open');
+                } else if(e.target.tagName.toLowerCase() === 'a' && e.target.parentElement.parentElement.classList.contains('dropdown-menu')) {
+                    // Allow navigation for submenu links
+                    // Do nothing special, let link work normally
+                } else {
+                    e.preventDefault();
+                    dropdown.classList.toggle('open');
+                }
+            } else {
+                // For desktop, toggle dropdown on click of parent menu
+                if(e.target.tagName.toLowerCase() === 'a' && e.target.parentElement.classList.contains('dropdown')) {
+                    e.preventDefault();
+                    if (dropdown.classList.contains('open')) {
+                        dropdown.classList.remove('open');
+                    } else {
+                        // Close any other open dropdowns first
+                        const openDropdowns = document.querySelectorAll('.dropdown.open');
+                        openDropdowns.forEach(d => {
+                            if (d !== dropdown) {
+                                d.classList.remove('open');
+                            }
+                        });
+                        dropdown.classList.add('open');
+                    }
+                }
+            }
+        });
+        // Remove any duplicate dropdown menus that might cause centered text
+        const duplicateDropdowns = document.querySelectorAll('.dropdown-menu.duplicate');
+        duplicateDropdowns.forEach(dd => dd.remove());
+        // Accessibility: allow keyboard toggle for dropdown
+        dropdown.addEventListener('keydown', (e) => {
+            if(e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                dropdown.classList.toggle('open');
+            }
+        });
+        // Fade-in effect on page load
+        window.addEventListener('load', function() {
+            document.body.classList.add('page-loaded');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Multikampus - SEISMA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(120deg, #003366 0%, #4f8cff 60%, #ffcc00 100%);
+            margin: 0;
+            min-height: 100vh;
+            opacity: 0;
+            transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1);
+        }
+        body.page-loaded {
+            opacity: 1;
+        }
+        .navbar { width: 100%; background: #003366; color: white; display: flex; justify-content: space-between; align-items: center; padding: 0 32px; position: fixed; top: 0; left: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.08); height: 64px; }
+        .navbar .logo { display: flex; align-items: center; }
+        .navbar .logo img { height: 38px; margin-right: 12px; }
+        .navbar .logo span { font-size: 20px; font-weight: bold; letter-spacing: 1px; }
+        .navbar ul { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; }
+        .navbar li { margin: 0 18px; position: relative; display: flex; align-items: center; }
+        .navbar a { color: white; text-decoration: none; font-weight: bold; font-size: 16px; transition: color 0.2s; }
+        .navbar a:hover { color: #ffcc00; }
+        .main-content { margin-top: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; }
+        .main-content h1 { color: #003366; font-size: 2.5rem; margin-bottom: 12px; }
+        .main-content p { color: #333; font-size: 1.2rem; max-width: 600px; text-align: center; }
+        footer { margin-top: 48px; background: #003366; color: #fff; text-align: center; padding: 18px 0 12px 0; font-size: 15px; letter-spacing: 0.5px; box-shadow: 0 -2px 8px rgba(0,0,0,0.04); }
+        /* Hamburger menu */
+        .hamburger {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin-right: 8px;
+        }
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 3px;
+            background: white;
+            margin: 4px 0;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 48px;
+            left: 0;
+            background: #fff;
+            min-width: 210px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+            border-radius: 8px;
+            padding: 10px 0;
+            z-index: 200;
+        }
+        .dropdown-menu.show {
+            display: block;
+        }
+        .dropdown-menu a {
+            display: block;
+            color: #003366;
+            padding: 12px 24px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: background 0.2s, color 0.2s;
+        }
+        .dropdown-menu a:hover {
+            background: #e0e7ff;
+            color: #007bff;
+        }
+        @media (max-width: 768px) {
+            .navbar ul { display: none; flex-direction: column; width: 100%; position: absolute; top: 64px; left: 0; background: #003366; padding: 0; }
+            .navbar li { margin: 0; width: 100%; }
+            .navbar a { padding: 14px 20px; display: block; }
+            .hamburger { display: flex; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="Logo_aksang.png" alt="Logo Dharaseva 25" />
+            <span>Dharaseva 25</span>
+        </div>
+        <ul>
+            <li style="display: flex; align-items: center; position: relative;">
+                <div class="hamburger" id="menuUtamaBtn" title="Menu Utama Dharaseva 25">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="dropdown-menu" id="menuUtamaDropdown">
+                    <a href="#tpb">TPB</a>
+                    <a href="#akademik">Akademik Semester 3</a>
+                    <a href="#dokumentasi">Dokumentasi Acara</a>
+                    <a href="#dpa">DPA</a>
+                    <a href="#beasiswa">Beasiswa</a>
+                    <a href="#organisasi">Organisasi Mahasiswa</a>
+                    <a href="#event">Event Kampus</a>
+                </div>
+                <a href="index.html" style="margin-left:16px; font-weight:bold;">Home</a>
+            </li>
+            <li><a href="landingpage.html">Landingpage</a></li>
+            <li><a href="timeline.html">Timeline</a></li>
+            <li><a href="organogram.html">Organogram</a></li>
+            <li><a href="galeridokumentasi.html">Galeri Dokumentasi</a></li>
+            <li><a href="luaran.html">Luaran</a></li>
+            <li><a href="penghargaan.html">Penghargaan</a></li>
+            <li><a href="multikampus.html">Multikampus</a></li>
+            <li><a href="kontak.html">Kontak</a></li>
+        </ul>
+    </nav>
+    <div class="main-content">
+        <h1>Multikampus</h1>
+        <p>Informasi tentang kampus utama dan kampus cabang SEISMA, serta fasilitas yang tersedia di masing-masing lokasi.</p>
+    </div>
+    <footer>
+        &copy; 2025 SEISMA. Portal Pendidikan. All rights reserved.
+    </footer>
+    <script>
+        // Hamburger menu utama
+        const menuBtn = document.getElementById('menuUtamaBtn');
+        const menuDropdown = document.getElementById('menuUtamaDropdown');
+        document.addEventListener('click', function(e) {
+            if (menuBtn && menuBtn.contains(e.target)) {
+                menuDropdown.classList.toggle('show');
+            } else if (menuDropdown && !menuDropdown.contains(e.target)) {
+                menuDropdown.classList.remove('show');
+            }
+        });
+
+        // Efek animasi fade-in saat halaman dimuat
+        window.addEventListener('load', function() {
+            document.body.classList.add('page-loaded');
+        });
+    </script>
+</body>
+</html>

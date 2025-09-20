@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Peta - Dharaseva 25</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(120deg, #003366 0%, #4f8cff 60%, #ffcc00 100%);
+            margin: 0;
+            min-height: 100vh;
+            opacity: 0;
+            transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1);
+        }
+        body.page-loaded {
+            opacity: 1;
+        }
+        /* Navbar styles */
+        .navbar {
+            width: 100%;
+            background: #003366;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            height: 64px;
+        }
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+        }
+        .navbar .logo img {
+            height: 38px;
+            margin-right: 12px;
+        }
+        .navbar .logo span {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .navbar nav {
+            display: flex;
+            align-items: center;
+        }
+        .navbar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+        .navbar li {
+            position: relative;
+            margin: 0 12px;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            padding: 8px 6px;
+            display: block;
+            transition: color 0.2s;
+        }
+        .navbar a:hover,
+        .navbar a:focus {
+            color: #ffcc00;
+        }
+        /* Dropdown menu */
+        .dropdown {
+            position: relative;
+        }
+        .dropdown > a::after {
+            content: " ▼";
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            color: #003366;
+            min-width: 180px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 8px 0;
+            z-index: 2000;
+            flex-wrap: nowrap;
+            flex-direction: column;
+        }
+        .dropdown-menu a {
+            color: #003366;
+            padding: 10px 20px;
+            font-weight: 500;
+            font-size: 15px;
+            white-space: nowrap;
+            text-align: left;
+        }
+        .dropdown-menu a:hover,
+        .dropdown-menu a:focus {
+            background: #e0e7ff;
+            color: #007bff;
+        }
+        .dropdown.open > .dropdown-menu {
+            display: block;
+        }
+        /* Hamburger menu - Always visible */
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+        }
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 3px;
+            background: white;
+            margin: 4px 0;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+        /* Responsive styles - Unified hamburger menu for all devices */
+        .navbar {
+            padding: 0 16px;
+        }
+        .navbar nav {
+            position: fixed;
+            top: 64px;
+            left: 0;
+            width: 100%;
+            background: #003366;
+            flex-direction: column;
+            display: none;
+            z-index: 1500;
+            max-height: calc(100vh - 64px);
+            overflow-y: auto;
+        }
+        .navbar nav.show {
+            display: flex;
+        }
+        .navbar ul {
+            flex-direction: column;
+            width: 100%;
+        }
+        .navbar li {
+            margin: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .navbar a {
+            padding: 14px 24px;
+            font-size: 18px;
+        }
+        .dropdown-menu {
+            position: static;
+            box-shadow: none;
+            background: #004080;
+            border-radius: 0;
+            padding-left: 20px;
+            display: none !important;
+        }
+        .dropdown-menu a {
+            color: white;
+            padding: 10px 0;
+            font-weight: normal;
+        }
+        .dropdown.open > .dropdown-menu {
+            display: flex !important;
+            flex-direction: column;
+        }
+        @media (max-width: 480px) {
+            .navbar a {
+                font-size: 16px;
+                padding: 12px 20px;
+            }
+        }
+        /* Hero and footer styles remain unchanged */
+        .hero {
+            margin-top: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+            padding: 32px 0 0 0;
+        }
+        .hero-img {
+            width: 180px;
+            height: 180px;
+            background: #e0e7ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+        .hero-img img {
+            width: 187px;
+            height: 187px;
+            object-fit: contain;
+        }
+        .hero-text {
+            max-width: 420px;
+        }
+        .hero-text h2 {
+            color: #003366;
+            margin-bottom: 10px;
+        }
+        .hero-text p {
+            color: #333;
+            font-size: 17px;
+            text-align: justify;
+        }
+        footer {
+            margin-top: 48px;
+            background: #003366;
+            color: #fff;
+            text-align: center;
+            padding: 18px 0 12px 0;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="logo">
+            <img src="Logo_aksang.png" alt="Logo Dharaseva 25" />
+            <span>Dharaseva 25</span>
+        </div>
+        <div class="hamburger" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" role="button" tabindex="0">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <nav id="mainMenu">
+            <ul>
+                <li class="dropdown" tabindex="0">
+                    <a href="#" aria-haspopup="true" aria-expanded="false">Menu Utama</a>
+                    <ul class="dropdown-menu" aria-label="submenu">
+                        <li><a href="tpb.html">Visi & Misi</a></li>
+                        <li><a href="akademik.html">Geodesi</a></li>
+                        <li><a href="dokumentasi.html">Dokumentasi Acara</a></li>
+                        <li><a href="event.html">Kegiatan</a></li>
+                        <li><a href="landingpage.html">Peta</a></li>
+                    </ul>
+                </li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="timeline.html">Timeline</a></li>
+                <li><a href="organogram.html">Organogram</a></li>
+                <li><a href="luaran.html">Luaran</a></li>
+                <li><a href="kontak.html">Kontak</a></li>
+            </ul>
+        </nav>
+    </nav>
+    <div class="hero">
+        <div class="hero-img">
+            <img src="Logo_ITB.png" alt="Logo ITB" />
+        </div>
+        <div class="hero-text">
+            <h2>Peta Lokasi</h2>
+            <p>Temukan berbagai informasi seputar peta lokasi, kegiatan mahasiswa, tujuan, dan event yang diadakan di Dheraseva 25. Jelajahi menu utama di pojok kanan atas untuk akses cepat ke berbagai layanan dan dokumentasi penting.</p>
+        </div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="map-section" style="max-width: 1200px; margin: 0 auto; padding: 40px 20px;">
+        <div class="map-container" style="background: white; border-radius: 12px; padding: 32px; margin-bottom: 32px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+            <h3 style="color: #003366; font-size: 28px; margin-bottom: 24px; text-align: center; font-weight: bold;">Lokasi Desa Sumbersari, Kecamatan Ciparay, RW 05</h3>
+
+            <div class="map-info" style="background: #f8f9fa; padding: 24px; border-radius: 8px; margin-bottom: 24px; border-left: 4px solid #4f8cff;">
+                <h4 style="color: #003366; font-size: 20px; margin-bottom: 12px; font-weight: bold;">Informasi Lokasi</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+                    <div>
+                        <strong>📍 Desa:</strong> Sumbersari<br>
+                        <strong>🏛️ Kecamatan:</strong> Ciparay<br>
+                        <strong>🏘️ RW:</strong> 05
+                    </div>
+                    <div>
+                        <strong>📍 Koordinat:</strong> -7.0258, 107.6894<br>
+                        <strong>🌍 Provinsi:</strong> Jawa Barat<br>
+                        <strong>🏙️ Kabupaten:</strong> Bandung
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Map -->
+            <div id="map" style="width: 100%; height: 500px; border-radius: 8px; border: 2px solid #003366; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"></div>
+
+            <div class="map-controls" style="background: #e8f4f8; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                <h4 style="color: #003366; font-size: 18px; margin-bottom: 12px; font-weight: bold;">🗺️ Kontrol Peta</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; font-size: 14px;">
+                    <div>🔍 <strong>Zoom:</strong> Gunakan scroll mouse atau tombol + dan -</div>
+                    <div>🖱️ <strong>Pan:</strong> Klik dan geser untuk berpindah lokasi</div>
+                    <div>📍 <strong>Marker:</strong> Lokasi Desa Sumbersari ditandai dengan pin merah</div>
+                    <div>🎯 <strong>Navigasi:</strong> Gunakan kontrol di pojok kiri atas untuk navigasi</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="location-details" style="background: white; border-radius: 12px; padding: 32px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+            <h3 style="color: #003366; font-size: 24px; margin-bottom: 20px; text-align: center; font-weight: bold;">Tentang Lokasi</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+                <div class="info-card" style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #28a745;">
+                    <h4 style="color: #003366; font-size: 18px; margin-bottom: 12px; font-weight: bold;">🌾 Profil Desa Sumbersari</h4>
+                    <p style="color: #555; line-height: 1.6; margin: 0;">
+                        Salah satu desa yang berada di Kecamatan Ciparay adalah Desa Sumbersari. Desa ini memiliki jumlah penduduk terbesar di wilayahnya sehingga dinamika kehidupan masyarakat berjalan sangat intensif. Namun, kondisi tersebut juga menimbulkan berbagai permasalahan, terutama dalam hal pengelolaan lingkungan. Sampah rumah tangga yang terus bertambah, keterbatasan sistem drainase, serta genangan air pada musim hujan menjadi isu utama yang dihadapi. Meski demikian, Desa Sumbersari memiliki potensi untuk melakukan perbaikan melalui pemberdayaan warga, edukasi mengenai lingkungan, serta inovasi dalam pengelolaan sampah dan air hujan.
+                    </p>
+                </div>
+
+                <div class="info-card" style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #ffcc00;">
+                    <h4 style="color: #003366; font-size: 18px; margin-bottom: 12px; font-weight: bold;">🏛️ Kecamatan Ciparay</h4>
+                    <p style="color: #555; line-height: 1.6; margin: 0;">
+                        Kecamatan Ciparay yang terletak di Kabupaten Bandung merupakan salah satu wilayah dengan tingkat kepadatan penduduk yang tinggi. Aktivitas masyarakat yang padat menjadikan kawasan ini menghadapi tantangan lingkungan yang cukup kompleks. Kondisi tersebut menuntut adanya pengelolaan yang terarah, terutama dalam menjaga kualitas lingkungan agar tetap selaras dengan perkembangan jumlah penduduk yang terus meningkat. Peluang yang dapat dikembangkan di tingkat kecamatan adalah sinergi antar-desa dalam program pengelolaan lingkungan, serta dukungan kebijakan dari pemerintah daerah untuk menguatkan upaya masyarakat.
+                    </p>
+                </div>
+
+                <div class="info-card" style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #dc3545;">
+                    <h4 style="color: #003366; font-size: 18px; margin-bottom: 12px; font-weight: bold;">🏘️ RW 05</h4>
+                    <p style="color: #555; line-height: 1.6; margin: 0;">
+                        Permasalahan lingkungan di Desa Sumbersari semakin nyata terlihat di RW 05, tepatnya Kampung Limahaur. Kawasan ini memiliki karakteristik permukiman padat dengan akses jalan yang sempit, sehingga rawan menimbulkan persoalan kebersihan. Genangan air sering terjadi saat musim hujan akibat sistem drainase yang terbatas, sementara peningkatan volume sampah rumah tangga diperparah dengan kebiasaan pembuangan sampah sembarangan. Dampak dari kondisi tersebut adalah timbulnya timbunan sampah di titik-titik tertentu yang mengurangi kenyamanan warga
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Peta Desa Section -->
+    <div class="peta-desa-section" style="max-width: 1200px; margin: 0 auto; padding: 40px 20px;">
+        <div class="peta-desa-container" style="background: white; border-radius: 12px; padding: 32px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); text-align: center;">
+            <h3 style="color: #003366; font-size: 28px; margin-bottom: 24px; font-weight: bold;">Peta Desa Sumbersari</h3>
+            <p style="color: #666; font-size: 16px; margin-bottom: 24px;">
+                Berikut adalah peta visual Desa Sumbersari, Kecamatan Ciparay, RW 05 yang memberikan gambaran detail mengenai wilayah dan struktur desa.
+            </p>
+
+            <div class="peta-image-wrapper" style="border: 2px solid #003366; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                <img src="PETA_DESA.jpg"
+                     alt="Peta Desa Sumbersari, Kecamatan Ciparay, RW 05"
+                     style="width: 100%; height: auto; max-height: 600px; object-fit: contain; display: block;"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+
+                <!-- Fallback text jika gambar tidak bisa dimuat -->
+                <div style="display: none; padding: 40px; background: #f8f9fa; color: #666; font-size: 16px;">
+                    <p>⚠️ Gambar peta tidak dapat dimuat.</p>
+                    <p>Silakan pastikan file PETA_DESA.jpg tersedia di folder project.</p>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 Dheraseva 25. Portal Aksi Angkatan. All rights reserved.
+    </footer>
+
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <script>
+        // Toggle mobile menu
+        const menuToggle = document.getElementById('menuToggle');
+        const mainMenu = document.getElementById('mainMenu');
+        const dropdown = document.querySelector('.dropdown');
+        // Initially close dropdown submenu
+        dropdown.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        mainMenu.classList.remove('show');
+
+        // Ensure dropdown menu is hidden on page load to prevent showing centered text menu
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+        if (dropdownMenu) {
+            dropdownMenu.style.display = 'none';
+        }
+        menuToggle.addEventListener('click', () => {
+            const expanded = menuToggle.getAttribute('aria-expanded') === 'true' || false;
+            menuToggle.setAttribute('aria-expanded', !expanded);
+            mainMenu.classList.toggle('show');
+            // Close dropdown submenu when main menu toggled closed
+            if (expanded) {
+                dropdown.classList.remove('open');
+            }
+        });
+        // Toggle dropdown submenu on mobile and desktop
+        dropdown.addEventListener('click', (e) => {
+            if(window.innerWidth <= 900) {
+                // Allow link navigation only if clicking on submenu links, not the parent menu
+                if(e.target.tagName.toLowerCase() === 'a' && e.target.parentElement.classList.contains('dropdown')) {
+                    // Prevent toggle if clicking parent menu link
+                    e.preventDefault();
+                    dropdown.classList.toggle('open');
+                } else if(e.target.tagName.toLowerCase() === 'a' && e.target.parentElement.parentElement.classList.contains('dropdown-menu')) {
+                    // Allow navigation for submenu links
+                    // Do nothing special, let link work normally
+                } else {
+                    e.preventDefault();
+                    dropdown.classList.toggle('open');
+                }
+            } else {
+                // For desktop, toggle dropdown on click of parent menu
+                if(e.target.tagName.toLowerCase() === 'a' && e.target.parentElement.classList.contains('dropdown')) {
+                    e.preventDefault();
+                    if (dropdown.classList.contains('open')) {
+                        dropdown.classList.remove('open');
+                    } else {
+                        // Close any other open dropdowns first
+                        const openDropdowns = document.querySelectorAll('.dropdown.open');
+                        openDropdowns.forEach(d => {
+                            if (d !== dropdown) {
+                                d.classList.remove('open');
+                            }
+                        });
+                        dropdown.classList.add('open');
+                    }
+                }
+            }
+        });
+        // Remove any duplicate dropdown menus that might cause centered text
+        const duplicateDropdowns = document.querySelectorAll('.dropdown-menu.duplicate');
+        duplicateDropdowns.forEach(dd => dd.remove());
+        // Accessibility: allow keyboard toggle for dropdown
+        dropdown.addEventListener('keydown', (e) => {
+            if(e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                dropdown.classList.toggle('open');
+            }
+        });
+        // Fade-in effect on page load
+        window.addEventListener('load', function() {
+            document.body.classList.add('page-loaded');
+        });
+
+        // Initialize the map after page loads
+        window.addEventListener('load', function() {
+            // Initialize the map
+            const map = L.map('map').setView([-7.0258, 107.6894], 15); // Coordinates for Desa Sumbersari, zoom level 15
+
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 18,
+            }).addTo(map);
+
+            // Add marker for Desa Sumbersari
+            const marker = L.marker([-7.0258, 107.6894]).addTo(map);
+
+            // Add popup to the marker
+            marker.bindPopup(`
+                <div style="text-align: center; font-family: Arial, sans-serif;">
+                    <h4 style="color: #003366; margin: 0 0 8px 0;">🏘️ Desa Sumbersari</h4>
+                    <p style="margin: 4px 0; color: #666;"><strong>Kecamatan:</strong> Ciparay</p>
+                    <p style="margin: 4px 0; color: #666;"><strong>RW:</strong> 05</p>
+                    <p style="margin: 4px 0; color: #666;"><strong>Kabupaten:</strong> Bandung</p>
+                    <p style="margin: 8px 0 0 0; font-size: 12px; color: #888;">Klik untuk informasi lebih lanjut</p>
+                </div>
+            `).open();
+
+            // Add click event to show additional information
+            marker.on('click', function() {
+                console.log('Marker clicked: Desa Sumbersari, Kecamatan Ciparay, RW 05');
+            });
+
+            // Add scale control
+            L.control.scale().addTo(map);
+
+            // Add zoom control
+            map.addControl(L.control.zoom({
+                position: 'topleft'
+            }));
+
+            // Optional: Add a circle around the location to show approximate area
+            L.circle([-7.0258, 107.6894], {
+                color: '#4f8cff',
+                fillColor: '#4f8cff',
+                fillOpacity: 0.1,
+                radius: 500 // 500 meters radius
+            }).addTo(map);
+
+            // Add layer control for different map views
+            const baseLayers = {
+                "OpenStreetMap": L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                    maxZoom: 18,
+                }),
+                "Satellite": L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                    attribution: '© <a href="https://www.arcgis.com/">Esri</a> &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+                    maxZoom: 18,
+                })
+            };
+
+            L.control.layers(baseLayers).addTo(map);
+
+            // Add loading indicator
+            map.on('load', function() {
+                console.log('Map loaded successfully');
+            });
+
+            // Handle map errors
+            map.on('error', function(err) {
+                console.log('Map error:', err);
+            });
+        });
+    </script>
+</body>
+</html>

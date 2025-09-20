@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Menu Utama SEISMA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(120deg, #003366 0%, #4f8cff 60%, #ffcc00 100%);
+            margin: 0;
+            min-height: 100vh;
+            opacity: 0;
+            transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1);
+        }
+        body.page-loaded {
+            opacity: 1;
+        }
+        /* Navbar styles */
+        .navbar {
+            width: 100%;
+            background: #003366;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            height: 64px;
+        }
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+        }
+        .navbar .logo img {
+            height: 38px;
+            margin-right: 12px;
+        }
+        .navbar .logo span {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .navbar nav {
+            display: flex;
+            align-items: center;
+        }
+        .navbar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+        .navbar li {
+            position: relative;
+            margin: 0 12px;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            padding: 8px 6px;
+            display: block;
+            transition: color 0.2s;
+        }
+        .navbar a:hover,
+        .navbar a:focus {
+            color: #ffcc00;
+        }
+        /* Dropdown menu */
+        .dropdown {
+            position: relative;
+        }
+        .dropdown > a::after {
+            content: " ▼";
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            color: #003366;
+            min-width: 200px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-radius: 8px;
+            z-index: 2000;
+            padding: 8px 0;
+        }
+        .dropdown-menu a {
+            color: #003366;
+            padding: 10px 16px;
+            display: block;
+            font-weight: normal;
+            transition: background-color 0.2s;
+        }
+        .dropdown-menu a:hover {
+            background-color: #f0f0f0;
+            color: #003366;
+        }
+        .dropdown.open > .dropdown-menu {
+            display: block;
+        }
+        /* Hamburger menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 8px;
+        }
+        .hamburger span {
+            width: 24px;
+            height: 3px;
+            background: white;
+            margin: 2px 0;
+            transition: 0.3s;
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+        /* Responsive styles */
+        @media (max-width: 900px) {
+            .navbar {
+                padding: 0 16px;
+            }
+            .navbar nav {
+                position: fixed;
+                top: 64px;
+                left: 0;
+                width: 100%;
+                background: #003366;
+                flex-direction: column;
+                display: none;
+                z-index: 1500;
+                max-height: calc(100vh - 64px);
+                overflow-y: auto;
+            }
+            .navbar nav.show {
+                display: flex;
+            }
+            .navbar ul {
+                flex-direction: column;
+                width: 100%;
+            }
+            .navbar li {
+                margin: 0;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+            .navbar a {
+                padding: 14px 24px;
+                font-size: 18px;
+            }
+            .dropdown-menu {
+                position: static;
+                box-shadow: none;
+                background: #004080;
+                border-radius: 0;
+                padding-left: 20px;
+                display: none;
+            }
+            .dropdown-menu a {
+                color: white;
+                padding: 10px 0;
+                font-weight: normal;
+            }
+            .dropdown.open > .dropdown-menu {
+                display: flex;
+                flex-direction: column;
+            }
+            .hamburger {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <img src="Logo_aksang.png" alt="Logo AKSANG">
+            <span>SEISMA</span>
+        </div>
+        <div class="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Beranda</a></li>
+                <li><a href="akademik.html">Akademik</a></li>
+                <li><a href="penelitian.html">Penelitian</a></li>
+                <li><a href="organisasi.html">Organisasi</a></li>
+                <li class="dropdown">
+                    <a href="#" onclick="toggleDropdown(event, 'menu-utama')">Menu Utama</a>
+                    <div class="dropdown-menu">
+                        <a href="akademik.html">Akademik</a>
+                        <a href="beasiswa.html">Beasiswa</a>
+                        <a href="dokumentasi.html">Dokumentasi</a>
+                        <a href="dpa.html">DPA</a>
+                        <a href="event.html">Event</a>
+                        <a href="galeridokumentasi.html">Galeri Dokumentasi</a>
+                        <a href="kontak.html">Kontak</a>
+                        <a href="landingpage.html">Landing Page</a>
+                        <a href="luaran.html">Luaran</a>
+                        <a href="multikampus.html">Multi Kampus</a>
+                        <a href="organisasi.html">Organisasi</a>
+                        <a href="organogram.html">Organogram</a>
+                        <a href="penghargaan.html">Penghargaan</a>
+                        <a href="timeline.html">Timeline</a>
+                        <a href="tpb.html">TPB</a>
+                    </div>
+                </li>
+                <li><a href="kontak.html">Kontak</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div style="padding-top: 64px; text-align: center; padding: 40px;">
+        <h1>Selamat Datang di Website SEISMA</h1>
+        <p>Sistem Informasi Mahasiswa Teknik Geodesi dan Geomatika</p>
+        <p><strong>Menu Utama</strong> dropdown sudah diperbaiki untuk bekerja di desktop dan mobile!</p>
+    </div>
+
+    <script>
+        // Toggle mobile menu
+        function toggleMenu() {
+            const nav = document.querySelector('.navbar nav');
+            const hamburger = document.querySelector('.hamburger');
+
+            nav.classList.toggle('show');
+            hamburger.classList.toggle('active');
+        }
+
+        // Toggle dropdown menu
+        function toggleDropdown(event, dropdownId) {
+            event.preventDefault();
+
+            // Close all other dropdowns first
+            const allDropdowns = document.querySelectorAll('.dropdown');
+            allDropdowns.forEach(dropdown => {
+                if (dropdown !== event.target.parentElement) {
+                    dropdown.classList.remove('open');
+                }
+            });
+
+            // Toggle current dropdown
+            const dropdown = event.target.parentElement;
+            dropdown.classList.toggle('open');
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.dropdown')) {
+                const allDropdowns = document.querySelectorAll('.dropdown');
+                allDropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('open');
+                });
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            const nav = document.querySelector('.navbar nav');
+            const hamburger = document.querySelector('.hamburger');
+
+            // Close mobile menu on resize to desktop
+            if (window.innerWidth > 900) {
+                nav.classList.remove('show');
+                hamburger.classList.remove('active');
+            }
+        });
+
+        // Fade-in effect on page load
+        window.addEventListener('load', function() {
+            document.body.classList.add('page-loaded');
+        });
+    </script>
+</body>
+</html>
